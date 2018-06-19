@@ -1,0 +1,13 @@
+<resources>Ripple
+    <declare-styleable name="RipplePulseRelativeLayout">
+        <attr name="rippleColor" format="color|reference" />
+        <attr name="pulseType" format="enum">
+            <enum name="fill" value="0"/>
+            <enum name="stroke" value="1"/>
+        </attr>
+        <attr name="pulseDuration" format="integer|reference"/>
+        <attr name="rippleStrokeWidth" format="dimension|reference"/>
+        <attr name="rippleStartRadius" format="integer"/>
+        <attr name="rippleEndRadius" format="integer"/>
+    </declare-styleable>
+</resources>
