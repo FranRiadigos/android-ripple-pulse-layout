@@ -15,8 +15,10 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:rippleStartRadius="100"
-        app:rippleEndRadius="130">
+        app:rippleStartRadiusPercent="100"
+        app:rippleEndRadiusPercent="130"
+        app:pulseType="stroke"
+        app:pulseDuration="800">
 
         <ImageView
             android:layout_width="100dp"
