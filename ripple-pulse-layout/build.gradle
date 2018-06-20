@@ -1,31 +1,20 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-
-repositories {
-    mavenCentral()
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.8.1'
+    }
 }
 
-android {
-    compileSdkVersion 27
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+apply from: '../buildsystem/android.gradle'
 
+android {
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
 }
 
 dependencies {
@@ -39,4 +28,26 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2.13.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+/*
+ * Resolves dependency versions across test and production APKs, specifically, transitive
+ * dependencies. This is required since Espresso internally has a dependency on support-annotations.
+ */
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-v4:27.1.1"
+    resolutionStrategy.force "com.android.support:appcompat-v7:27.1.1"
+    resolutionStrategy.force "com.android.support:support-annotations:27.1.1"
+}
+
+group = 'com.kuassivi.android.view'
+version = android.defaultConfig.versionName
+
+publish {
+    userOrg = 'kuassivi'
+    groupId = project.group
+    artifactId = project.name
+    publishVersion = project.version
+    desc = 'Android Ripple Pulse Layout'
+    website = 'https://github.com/kuassivi/android-ripple-pulse-layout'
 }
