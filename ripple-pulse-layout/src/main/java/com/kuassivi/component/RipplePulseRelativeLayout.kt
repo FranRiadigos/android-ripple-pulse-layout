@@ -330,13 +330,13 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
             drawPulse(canvas, rippleBounds, ripplePaint)
 
-            if (isInEditMode) {
-                val paint = Paint(ripplePaint)
-                paint.alpha = 20
-                val bounds = RectF(rippleBounds)
-                invalidate(bounds, _rippleEndRadiusPercent)
-                drawPulse(canvas, bounds, paint)
-            }
+//            if (isInEditMode) {
+//                val paint = Paint(ripplePaint)
+//                paint.alpha = 20
+//                val bounds = RectF(rippleBounds)
+//                invalidate(bounds, _rippleEndRadiusPercent)
+//                drawPulse(canvas, bounds, paint)
+//            }
         }
     }
 
