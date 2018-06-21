@@ -15,11 +15,11 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:rippleStartRadiusPercent="100"
-        app:rippleEndRadiusPercent="250"
-        app:showPreview="true"
-        app:pulseType="stroke"
-        app:pulseDuration="1800">
+        app:pulse_layout_RippleStartRadiusPercent="100"
+        app:pulse_layout_RippleEndRadiusPercent="350"
+        app:pulse_layout_ShowPreview="true"
+        app:pulse_layout_PulseType="fill"
+        app:pulse_layout_PulseDuration="1800">
 
         <ImageView
             android:layout_width="100dp"

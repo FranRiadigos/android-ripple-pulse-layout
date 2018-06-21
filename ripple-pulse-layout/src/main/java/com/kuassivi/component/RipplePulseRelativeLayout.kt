@@ -192,39 +192,39 @@ class RipplePulseRelativeLayout : RelativeLayout {
         val typedValue = TypedValue()
 
         _rippleColor = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_rippleColor)?.data ?: rippleColor
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleColor)?.data ?: rippleColor
 
         _rippleStrokeWidth = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_rippleStrokeWidth)?.float ?: rippleStrokeWidth
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleStrokeWidth)?.float ?: rippleStrokeWidth
 
         _pulseDuration = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulseDuration)?.data ?: pulseDuration
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_PulseDuration)?.data ?: pulseDuration
 
         _startDelay = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_startDelay)?.data ?: startDelay
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_StartDelay)?.data ?: startDelay
 
         _endDelay = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_endDelay)?.data ?: endDelay
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_EndDelay)?.data ?: endDelay
 
         _pulseType = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulseType)?.data ?: pulseType
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_PulseType)?.data ?: pulseType
 
         _rippleStartRadiusPercent = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_rippleStartRadiusPercent)?.float
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleStartRadiusPercent)?.float
                 ?: rippleStartRadiusPercent
 
         _rippleEndRadiusPercent = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_rippleEndRadiusPercent)?.float
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleEndRadiusPercent)?.float
                 ?: rippleEndRadiusPercent
 
         _pulseInterpolator = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulseInterpolator)?.resourceId
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_PulseInterpolator)?.resourceId
                 ?: pulseInterpolator
 
         // TypedValue does not handle properly Boolean values while on inEditMode (Preview window)
         // so we have to get the value from the TypedArray
-        if (isInEditMode && a.hasValue(R.styleable.RipplePulseRelativeLayout_showPreview))
-            _showPreview = a.getBoolean(R.styleable.RipplePulseRelativeLayout_showPreview, showPreview)
+        if (isInEditMode && a.hasValue(R.styleable.RipplePulseRelativeLayout_pulse_layout_ShowPreview))
+            _showPreview = a.getBoolean(R.styleable.RipplePulseRelativeLayout_pulse_layout_ShowPreview, showPreview)
 
         a.recycle()
 

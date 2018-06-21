@@ -1,17 +1,17 @@
 <resources>Ripple
     <declare-styleable name="RipplePulseRelativeLayout">
-        <attr name="showPreview" format="boolean" />
-        <attr name="rippleColor" format="color|reference" />
-        <attr name="pulseType" format="enum">
-            <enum name="fill" value="0"/>
-            <enum name="stroke" value="1"/>
+        <attr name="pulse_layout_ShowPreview" format="boolean" />
+        <attr name="pulse_layout_RippleColor" format="color|reference" />
+        <attr name="pulse_layout_PulseType" format="enum">
+            <enum name="fill" value="0" />
+            <enum name="stroke" value="1" />
         </attr>
-        <attr name="pulseDuration" format="integer|reference"/>
-        <attr name="startDelay" format="integer|reference"/>
-        <attr name="endDelay" format="integer|reference"/>
-        <attr name="rippleStrokeWidth" format="dimension|reference"/>
-        <attr name="rippleStartRadiusPercent" format="float"/>
-        <attr name="rippleEndRadiusPercent" format="float"/>
-        <attr name="pulseInterpolator" format="reference"/>
+        <attr name="pulse_layout_PulseDuration" format="integer|reference" />
+        <attr name="pulse_layout_StartDelay" format="integer|reference" />
+        <attr name="pulse_layout_EndDelay" format="integer|reference" />
+        <attr name="pulse_layout_RippleStrokeWidth" format="dimension|reference" />
+        <attr name="pulse_layout_RippleStartRadiusPercent" format="float" />
+        <attr name="pulse_layout_RippleEndRadiusPercent" format="float" />
+        <attr name="pulse_layout_PulseInterpolator" format="reference" />
     </declare-styleable>
 </resources>
