@@ -191,8 +191,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
         val typedValue = TypedValue()
 
-        _rippleColor = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleColor)?.data ?: rippleColor
+        _rippleColor = a.getColor(R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleColor, rippleColor)
 
         _rippleStrokeWidth = a.getData(typedValue,
                 R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleStrokeWidth)?.float ?: rippleStrokeWidth
@@ -223,8 +222,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
         // TypedValue does not handle properly Boolean values while on inEditMode (Preview window)
         // so we have to get the value from the TypedArray
-        if (isInEditMode && a.hasValue(R.styleable.RipplePulseRelativeLayout_pulse_layout_ShowPreview))
-            _showPreview = a.getBoolean(R.styleable.RipplePulseRelativeLayout_pulse_layout_ShowPreview, showPreview)
+        if (isInEditMode) _showPreview = a.getBoolean(R.styleable.RipplePulseRelativeLayout_pulse_layout_ShowPreview, showPreview)
 
         a.recycle()
 
