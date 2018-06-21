@@ -249,10 +249,8 @@ class RipplePulseRelativeLayout : RelativeLayout {
     }
 
     fun stopPulse() {
-        if (animatorSet.isRunning) {
-            animatorSet.cancel()
-            invalidate()
-        }
+        animatorSet.cancel()
+        invalidate()
     }
 
     private fun startAnimator() {
@@ -266,13 +264,20 @@ class RipplePulseRelativeLayout : RelativeLayout {
                 }
             }
             addListener(object : AnimatorListenerAdapter() {
+                private var canceled = false
+
+                override fun onAnimationCancel(animation: Animator?) {
+                    canceled = true
+                }
+
                 override fun onAnimationEnd(animation: Animator?) {
-                    postDelayed({
-                        if (!animatorSet.isRunning) {
-                            invalidate(rippleBounds, rippleStartRadiusPercent)
-                            animatorSet.start()
-                        }
-                    }, endDelay.toLong())
+                    if (!canceled) postDelayed({
+                            if (!animatorSet.isRunning) {
+                                invalidate(rippleBounds, rippleStartRadiusPercent)
+                                animatorSet.start()
+                            }
+                        }, endDelay.toLong())
+                    else canceled = false
                 }
             })
         }
