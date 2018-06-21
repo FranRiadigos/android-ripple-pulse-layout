@@ -13,7 +13,7 @@ apply from: '../buildsystem/android.gradle'
 
 android {
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 18
     }
 }
 

@@ -1,14 +1,12 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.kuassivi.demo.android_ripple_pulse_layout"
-        minSdkVersion 14
+        minSdkVersion 18
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"

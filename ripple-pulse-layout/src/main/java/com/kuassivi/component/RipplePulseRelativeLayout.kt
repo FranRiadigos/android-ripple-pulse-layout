@@ -6,6 +6,7 @@ import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
@@ -16,16 +17,24 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 
+/**
+ * Get the data value from a TypedValue.
+ * Ideally you should pass a reused TypedValue instance.
+ */
+fun TypedArray.getData(typedValue: TypedValue, styleId: Int) =
+        if (getValue(styleId, typedValue)) typedValue else null
 
+/**
+ * Ripple Pulse RelativeLayout
+ */
 class RipplePulseRelativeLayout : RelativeLayout {
 
     /**
-     * Constant values
+     * Constant values (private static fields)
      */
     companion object {
         private const val STROKE = 1
         private const val FILL = 0
-        private const val ANGLE_360 = 360F
     }
 
     /**
@@ -90,8 +99,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
         get() = _pulseDuration
         set(value) {
             _pulseDuration = value
-            stopPulse()
-            startPulse()
+            restartPulse()
         }
 
     /**
@@ -102,8 +110,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
         get() = _startDelay
         set(value) {
             _startDelay = value
-            stopPulse()
-            startPulse()
+            restartPulse()
         }
 
     /**
@@ -114,8 +121,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
         get() = _endDelay
         set(value) {
             _endDelay = value
-            stopPulse()
-            startPulse()
+            restartPulse()
         }
 
     /**
@@ -126,8 +132,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
         get() = _rippleStartRadiusPercent
         set(value) {
             _rippleStartRadiusPercent = value
-            stopPulse()
-            startPulse()
+            restartPulse()
         }
 
     /**
@@ -138,8 +143,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
         get() = _rippleEndRadiusPercent
         set(value) {
             _rippleEndRadiusPercent = value
-            stopPulse()
-            startPulse()
+            restartPulse()
         }
 
     /**
@@ -150,8 +154,18 @@ class RipplePulseRelativeLayout : RelativeLayout {
         get() = _pulseInterpolator
         set(value) {
             _pulseInterpolator = value
-            stopPulse()
-            startPulse()
+            restartPulse()
+        }
+
+    /**
+     * Shows a preview on the editor
+     */
+    private var _showPreview = false
+    var showPreview
+        get() = _showPreview
+        set(value) {
+            _showPreview = value
+            restartPulse()
         }
 
     constructor(context: Context) : this(context, null)
@@ -166,8 +180,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
         _rippleColor = ContextCompat.getColor(context, R.color.com_chattylabs_component_color_green)
         _pulseDuration = resources.getInteger(android.R.integer.config_longAnimTime)
         _rippleStrokeWidth = resources.getDimension(R.dimen.com_chattylabs_component_dimen_stroke)
-        // This option is needed to get onDraw called
-        // otherwise we would need to re-measure the bounds of this View
+        // This option is needed to get onDraw called, otherwise we would need to re-measure the bounds of this View
         setWillNotDraw(false)
     }
 
@@ -178,56 +191,57 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
         val typedValue = TypedValue()
 
-        if (a.getValue(R.styleable.RipplePulseRelativeLayout_rippleColor, typedValue))
-            _rippleColor = typedValue.data
+        _rippleColor = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_rippleColor)?.data ?: rippleColor
 
-        if (a.getValue(R.styleable.RipplePulseRelativeLayout_pulseDuration, typedValue))
-            _pulseDuration = typedValue.data
+        _rippleStrokeWidth = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_rippleStrokeWidth)?.float ?: rippleStrokeWidth
 
-        if (a.getValue(R.styleable.RipplePulseRelativeLayout_rippleStrokeWidth, typedValue))
-            _rippleStrokeWidth = typedValue.float
+        _pulseDuration = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_pulseDuration)?.data ?: pulseDuration
 
-        if (a.getValue(R.styleable.RipplePulseRelativeLayout_startDelay, typedValue))
-            _startDelay = typedValue.data
+        _startDelay = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_startDelay)?.data ?: startDelay
 
-        if (a.getValue(R.styleable.RipplePulseRelativeLayout_endDelay, typedValue))
-            _endDelay = typedValue.data
+        _endDelay = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_endDelay)?.data ?: endDelay
 
-        if (a.hasValue(R.styleable.RipplePulseRelativeLayout_pulseType))
-            _pulseType = a.getInt(
-                    R.styleable.RipplePulseRelativeLayout_pulseType,
-                    pulseType)
+        _pulseType = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_pulseType)?.data ?: pulseType
 
-        if (a.hasValue(R.styleable.RipplePulseRelativeLayout_rippleStartRadiusPercent))
-            _rippleStartRadiusPercent = a.getFloat(
-                    R.styleable.RipplePulseRelativeLayout_rippleStartRadiusPercent,
-                    rippleStartRadiusPercent)
+        _rippleStartRadiusPercent = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_rippleStartRadiusPercent)?.float
+                ?: rippleStartRadiusPercent
 
-        if (a.hasValue(R.styleable.RipplePulseRelativeLayout_rippleEndRadiusPercent))
-            _rippleEndRadiusPercent = a.getFloat(
-                    R.styleable.RipplePulseRelativeLayout_rippleEndRadiusPercent,
-                    rippleEndRadiusPercent)
+        _rippleEndRadiusPercent = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_rippleEndRadiusPercent)?.float
+                ?: rippleEndRadiusPercent
 
-        if (a.hasValue(R.styleable.RipplePulseRelativeLayout_pulseInterpolator))
-            _pulseInterpolator = a.getResourceId(
-                    R.styleable.RipplePulseRelativeLayout_pulseInterpolator,
-                    pulseInterpolator)
+        _pulseInterpolator = a.getData(typedValue,
+                R.styleable.RipplePulseRelativeLayout_pulseInterpolator)?.resourceId
+                ?: pulseInterpolator
+
+        // TypedValue does not handle properly Boolean values while on inEditMode (Preview window)
+        // so we have to get the value from the TypedArray
+        if (isInEditMode && a.hasValue(R.styleable.RipplePulseRelativeLayout_showPreview))
+            _showPreview = a.getBoolean(R.styleable.RipplePulseRelativeLayout_showPreview, showPreview)
 
         a.recycle()
 
-        // Set up a default Paint object
+        // Initialize default objects
         ripplePaint = Paint().apply {
             flags = Paint.ANTI_ALIAS_FLAG
         }
-
-        // Set up a default Bounds object
         rippleBounds = RectF()
-
-        // Set up a default AnimatorSet object
         animatorSet = AnimatorSet()
 
         // Initialize Paint
         invalidatePaint()
+    }
+
+    private fun restartPulse() {
+        stopPulse()
+        startPulse()
     }
 
     fun startPulse() {
@@ -244,7 +258,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
     }
 
     private fun startAnimator() {
-        val scale = ValueAnimator.ofFloat(_rippleStartRadiusPercent, _rippleEndRadiusPercent).apply {
+        val scale = ValueAnimator.ofFloat(rippleStartRadiusPercent, rippleEndRadiusPercent).apply {
             addUpdateListener {
                 radius = it.animatedValue as Float
                 fraction = it.animatedFraction
@@ -257,10 +271,10 @@ class RipplePulseRelativeLayout : RelativeLayout {
                 override fun onAnimationEnd(animation: Animator?) {
                     postDelayed({
                         if (!animatorSet.isRunning) {
-                            invalidate(rippleBounds, _rippleStartRadiusPercent)
+                            invalidate(rippleBounds, rippleStartRadiusPercent)
                             animatorSet.start()
                         }
-                    }, _endDelay.toLong())
+                    }, endDelay.toLong())
                 }
             })
         }
@@ -278,9 +292,9 @@ class RipplePulseRelativeLayout : RelativeLayout {
         }
 
         animatorSet.apply {
-            duration = _pulseDuration.toLong()
-            startDelay = _startDelay.toLong()
-            interpolator = AnimationUtils.loadInterpolator(context, _pulseInterpolator)
+            duration = pulseDuration.toLong()
+            startDelay = this@RipplePulseRelativeLayout.startDelay.toLong()
+            interpolator = AnimationUtils.loadInterpolator(context, pulseInterpolator)!!
             playTogether(scale, alpha)
         }
         animatorSet.start()
@@ -288,20 +302,20 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
     private fun invalidatePaint() {
         ripplePaint.apply {
-            color = _rippleColor
-            strokeWidth = if (_pulseType == STROKE) _rippleStrokeWidth else 0F
-            style = if (_pulseType == FILL) Paint.Style.FILL else Paint.Style.STROKE
+            color = rippleColor
+            strokeWidth = if (pulseType == STROKE) rippleStrokeWidth else 0F
+            style = if (pulseType == FILL) Paint.Style.FILL else Paint.Style.STROKE
         }
     }
 
-    private fun invalidate(bounds: RectF, radius: Float) {
+    private fun invalidate(bounds: RectF, percent: Float) {
         val halfWidth = (width / 2)
         val halfHeight = (height / 2)
         bounds.apply {
-            left = halfWidth - (halfWidth * (radius / 100.0f))
-            top = halfHeight - (halfHeight * (radius / 100.0f))
-            right = halfWidth + (halfWidth * (radius / 100.0f))
-            bottom = halfHeight + (halfHeight * (radius / 100.0f))
+            left = halfWidth - (halfWidth * (percent / 100.0f))
+            top = halfHeight - (halfHeight * (percent / 100.0f))
+            right = halfWidth + (halfWidth * (percent / 100.0f))
+            bottom = halfHeight + (halfHeight * (percent / 100.0f))
         }
     }
 
@@ -312,14 +326,14 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
-        if (isInEditMode) {
-            invalidate(rippleBounds, _rippleStartRadiusPercent)
+        if (isInEditMode && showPreview) {
+            invalidate(rippleBounds, rippleStartRadiusPercent)
         }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        // Makes immediate parent to not clip children on its bounds
+        // Makes immediate parent not to clip its children on its bounds
         (parent as? ViewGroup)?.clipChildren = false
     }
 
@@ -330,22 +344,19 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
             drawPulse(canvas, rippleBounds, ripplePaint)
 
-//            if (isInEditMode) {
-//                val paint = Paint(ripplePaint)
-//                paint.alpha = 20
-//                val bounds = RectF(rippleBounds)
-//                invalidate(bounds, _rippleEndRadiusPercent)
-//                drawPulse(canvas, bounds, paint)
-//            }
+            // Shows the start and end pulse aspect within the Preview window
+            if (isInEditMode && showPreview) {
+                for (idx in rippleStartRadiusPercent.toInt()..rippleEndRadiusPercent.toInt() step 50) {
+                    val paint = Paint(ripplePaint)
+                    paint.alpha = 100
+                    val bounds = RectF(rippleBounds).apply { invalidate(this, idx.toFloat()) }
+                    drawPulse(canvas, bounds, paint)
+                }
+            }
         }
     }
 
     private fun drawPulse(canvas: Canvas?, bounds: RectF, paint: Paint) {
-        // Draws the desired pulse graphics according to the pulse Type
-        if (_pulseType == STROKE) {
-            canvas?.drawArc(bounds, ANGLE_360, ANGLE_360, false, paint)
-        } else {
-            canvas?.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() / 2, paint)
-        }
+        canvas?.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() / 2, paint)
     }
 }
