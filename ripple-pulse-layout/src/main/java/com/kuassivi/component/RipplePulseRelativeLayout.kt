@@ -30,7 +30,7 @@ fun TypedArray.getData(typedValue: TypedValue, styleId: Int) =
 class RipplePulseRelativeLayout : RelativeLayout {
 
     /**
-     * Constant values (private static fields)
+     * Constant values to select the ripple's type
      */
     companion object {
         private const val STROKE = 1
@@ -38,7 +38,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
     }
 
     /**
-     * Object that paints either an arc with a stroke or a circle with a fill color
+     * Object that paints either a circle with a stroke or with a fill color
      */
     private lateinit var ripplePaint: Paint
 
@@ -53,10 +53,9 @@ class RipplePulseRelativeLayout : RelativeLayout {
     private lateinit var animatorSet: AnimatorSet
 
     /**
-     * The updated radius & fraction
+     * The updated radius
      */
     private var radius = 0F
-    private var fraction = 0F
 
     /**
      * The ripple Color
@@ -209,16 +208,13 @@ class RipplePulseRelativeLayout : RelativeLayout {
                 R.styleable.RipplePulseRelativeLayout_pulse_layout_PulseType)?.data ?: pulseType
 
         _rippleStartRadiusPercent = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleStartRadiusPercent)?.float
-                ?: rippleStartRadiusPercent
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleStartRadiusPercent)?.float ?: rippleStartRadiusPercent
 
         _rippleEndRadiusPercent = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleEndRadiusPercent)?.float
-                ?: rippleEndRadiusPercent
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleEndRadiusPercent)?.float ?: rippleEndRadiusPercent
 
         _pulseInterpolator = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulse_layout_PulseInterpolator)?.resourceId
-                ?: pulseInterpolator
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_PulseInterpolator)?.resourceId ?: pulseInterpolator
 
         // TypedValue does not handle properly Boolean values while on inEditMode (Preview window)
         // so we have to get the value from the TypedArray
@@ -249,37 +245,22 @@ class RipplePulseRelativeLayout : RelativeLayout {
     }
 
     fun stopPulse() {
+        animatorSet.removeAllListeners()
         animatorSet.cancel()
         invalidate()
     }
+
+    fun isAnimationRunning() = animatorSet.isRunning
 
     private fun startAnimator() {
         val scale = ValueAnimator.ofFloat(rippleStartRadiusPercent, rippleEndRadiusPercent).apply {
             addUpdateListener {
                 radius = it.animatedValue as Float
-                fraction = it.animatedFraction
                 if (radius > 0) {
                     invalidate(rippleBounds, radius)
                     invalidate()
                 }
             }
-            addListener(object : AnimatorListenerAdapter() {
-                private var canceled = false
-
-                override fun onAnimationCancel(animation: Animator?) {
-                    canceled = true
-                }
-
-                override fun onAnimationEnd(animation: Animator?) {
-                    if (!canceled) postDelayed({
-                            if (!animatorSet.isRunning) {
-                                invalidate(rippleBounds, rippleStartRadiusPercent)
-                                animatorSet.start()
-                            }
-                        }, endDelay.toLong())
-                    else canceled = false
-                }
-            })
         }
 
         val alpha = ValueAnimator.ofInt(255, 0).apply {
@@ -298,6 +279,16 @@ class RipplePulseRelativeLayout : RelativeLayout {
             duration = pulseDuration.toLong()
             startDelay = this@RipplePulseRelativeLayout.startDelay.toLong()
             interpolator = AnimationUtils.loadInterpolator(context, pulseInterpolator)!!
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    postDelayed({
+                        if (!animatorSet.isRunning) {
+                            invalidate(rippleBounds, rippleStartRadiusPercent)
+                            animatorSet.start()
+                        }
+                    }, endDelay.toLong())
+                }
+            })
             playTogether(scale, alpha)
         }
         animatorSet.start()
@@ -337,7 +328,10 @@ class RipplePulseRelativeLayout : RelativeLayout {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         // Makes immediate parent not to clip its children on its bounds
-        (parent as? ViewGroup)?.clipChildren = false
+        (parent as? ViewGroup)?.apply {
+            clipChildren = false
+            if (!isInLayout) requestLayout()
+        }
     }
 
     @SuppressLint("DrawAllocation")

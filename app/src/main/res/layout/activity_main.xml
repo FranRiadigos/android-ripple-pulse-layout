@@ -19,7 +19,8 @@
         app:pulse_layout_RippleEndRadiusPercent="350"
         app:pulse_layout_ShowPreview="true"
         app:pulse_layout_PulseType="fill"
-        app:pulse_layout_PulseDuration="1800">
+        app:pulse_layout_PulseDuration="1800"
+        android:background="?attr/selectableItemBackgroundBorderless">
 
         <ImageView
             android:layout_width="100dp"

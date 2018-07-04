@@ -10,6 +10,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        pulseLayout.setOnClickListener {
+            if (pulseLayout.isAnimationRunning())
+                pulseLayout.stopPulse()
+            else pulseLayout.startPulse()
+        }
+
         pulseLayout.startPulse()
     }
 }
