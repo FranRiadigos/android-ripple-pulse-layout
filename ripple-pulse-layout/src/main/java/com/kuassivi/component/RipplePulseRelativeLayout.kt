@@ -167,6 +167,9 @@ class RipplePulseRelativeLayout : RelativeLayout {
             restartPulse()
         }
 
+    // Avoid the use of @JvmOverloads due to some issue that might happen using Instant run
+    // https://antonioleiva.com/custom-views-android-kotlin/
+
     constructor(context: Context) : this(context, null)
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -185,8 +188,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
     private fun initAttributes(attrs: AttributeSet?, defStyle: Int) {
         // Load attributes
-        val a = context.obtainStyledAttributes(
-                attrs, R.styleable.RipplePulseRelativeLayout, defStyle, 0)
+        val a = context.obtainStyledAttributes(attrs, R.styleable.RipplePulseRelativeLayout, defStyle, 0)
 
         val typedValue = TypedValue()
 
@@ -208,17 +210,20 @@ class RipplePulseRelativeLayout : RelativeLayout {
                 R.styleable.RipplePulseRelativeLayout_pulse_layout_PulseType)?.data ?: pulseType
 
         _rippleStartRadiusPercent = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleStartRadiusPercent)?.float ?: rippleStartRadiusPercent
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleStartRadiusPercent)?.float
+                ?: rippleStartRadiusPercent
 
         _rippleEndRadiusPercent = a.getData(typedValue,
-                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleEndRadiusPercent)?.float ?: rippleEndRadiusPercent
+                R.styleable.RipplePulseRelativeLayout_pulse_layout_RippleEndRadiusPercent)?.float
+                ?: rippleEndRadiusPercent
 
         _pulseInterpolator = a.getData(typedValue,
                 R.styleable.RipplePulseRelativeLayout_pulse_layout_PulseInterpolator)?.resourceId ?: pulseInterpolator
 
         // TypedValue does not handle properly Boolean values while on inEditMode (Preview window)
         // so we have to get the value from the TypedArray
-        if (isInEditMode) _showPreview = a.getBoolean(R.styleable.RipplePulseRelativeLayout_pulse_layout_ShowPreview, showPreview)
+        if (isInEditMode) _showPreview =
+                a.getBoolean(R.styleable.RipplePulseRelativeLayout_pulse_layout_ShowPreview, showPreview)
 
         a.recycle()
 
@@ -327,7 +332,7 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        // Makes immediate parent not to clip its children on its bounds
+        // Makes immediate parent not to clip its children on their bounds
         (parent as? ViewGroup)?.apply {
             clipChildren = false
             if (!isInLayout) requestLayout()
@@ -341,11 +346,10 @@ class RipplePulseRelativeLayout : RelativeLayout {
 
             drawPulse(canvas, rippleBounds, ripplePaint)
 
-            // Shows the start and end pulse aspect within the Preview window
+            // Shows a demo aspect pulse's progress within the Preview window
             if (isInEditMode && showPreview) {
                 for (idx in rippleStartRadiusPercent.toInt()..rippleEndRadiusPercent.toInt() step 50) {
-                    val paint = Paint(ripplePaint)
-                    paint.alpha = 100
+                    val paint = Paint(ripplePaint).apply {alpha = if (pulseType == FILL) 50 else 100 }
                     val bounds = RectF(rippleBounds).apply { invalidate(this, idx.toFloat()) }
                     drawPulse(canvas, bounds, paint)
                 }
