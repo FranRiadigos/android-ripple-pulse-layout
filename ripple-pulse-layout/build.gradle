@@ -7,13 +7,28 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.chattylabs.versioning' version '0.19.0'
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
-apply from: '../buildsystem/android.gradle'
+apply from: '../buildsystem/android2.gradle'
 
 android {
     defaultConfig {
         minSdkVersion 18
+    }
+}
+
+versioning {
+
+    tagPrefix "version/"            // Optional. Default is empty.
+
+    keywords {
+        major "[incompatible]"      // Optional. By default it never upgrades the major version.
+        minor "[feature]"           // Required
+        patch "[bug]", "[patch]"    // Required
     }
 }
 
