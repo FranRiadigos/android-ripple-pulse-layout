@@ -1,14 +1,14 @@
 # Ripple Pulse over RelativeLayout
 
-Android Custom View that acts like a pulse container wrapping any View.
+Android Custom View that acts like a pulse container wrapping any View inside.
 
 ![Demo][1]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Android Studio Preview][2]
 
 ## Why to use this library?
 
-Other libraries add a View object into the container to make the same effect. This is expensive memory consumption and in case you want to do a `ViewGroup.removeAllViews()` the animation will disappear because the View object will also gone.
+Other libraries add a View object into the container to make the same effect. This is a expensive memory consumption and in case you want to do a `ViewGroup.removeAllViews()` the animation will disappear because the View object will have also gone.
 
-Instead, **RipplePulseRelativeLayout** library just draw a Paint layer over the canvas, leaving the container empty while doing a smooth animation.
+Instead, the **Ripple Pulse** library just draws a Paint layer over the canvas, leaving the container empty while doing a smooth animation.
 
 
 ## Gradle
@@ -21,13 +21,13 @@ Add this to your build.gradle:
 ```groovy
 repositories {
  
-    maven { url "https://dl.bintray.com/chattylabs/maven" }
+    maven { url "https://dl.bintray.com/kuassivi/maven" }
     
 }
  
 dependencies{
  
-    implementation 'com.kuassivi.android.view:ripple-pulse-layout:0.1.5'
+    implementation 'com.kuassivi.android.view:ripple-pulse-layout:<latest version>'
     
 }
 ```
