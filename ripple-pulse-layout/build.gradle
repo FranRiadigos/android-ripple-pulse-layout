@@ -15,12 +15,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 apply from: '../buildsystem/android2.gradle'
 
-android {
-    defaultConfig {
-        minSdkVersion 18
-    }
-}
-
 versioning {
 
     tagPrefix "version/"            // Optional. Default is empty.
@@ -29,6 +23,14 @@ versioning {
         major "[incompatible]"      // Optional. By default it never upgrades the major version.
         minor "[feature]"           // Required
         patch "[bug]", "[patch]"    // Required
+    }
+}
+
+android {
+    defaultConfig {
+        minSdkVersion 18
+        versionCode versioning.code()
+        versionName versioning.name()
     }
 }
 
