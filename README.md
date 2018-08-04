@@ -21,6 +21,9 @@ Add this to your build.gradle:
 ```groovy
 repositories {
  
+    jcenter()
+    
+    // Optional. Access to early versions.
     maven { url "https://dl.bintray.com/kuassivi/maven" }
     
 }
@@ -53,17 +56,17 @@ Add this to your layout:
 </com.kuassivi.component.RipplePulseRelativeLayout>
 ```
 
-To start the animation just do:
+To start the animation
 
-```java 
-pulseLayout.startPulse()
-```
 
-To stop the animation just do:
+    pulseLayout.startPulse()
 
-```java 
-pulseLayout.stopPulse()
-```
+
+To stop the animation
+
+
+    pulseLayout.stopPulse()
+
 
 ## Properties
 
