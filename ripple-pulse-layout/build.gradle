@@ -13,7 +13,7 @@ plugins {
 
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
-apply from: '../buildsystem/android2.gradle'
+apply from: '../buildsystem/android.gradle'
 
 versioning {
 
