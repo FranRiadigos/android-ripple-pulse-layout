@@ -1,22 +1,24 @@
 # Ripple Pulse over RelativeLayout
 
-Android Custom View that acts like a pulse container wrapping any View inside.
+This is an Android Custom Layout container that generates pulses.
 
 ![Demo][1]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Android Studio Preview][2]
 
-## Why to use this library?
+## Why this library?
 
-Other libraries add a View object into the container to make the same effect. This is a expensive memory consumption and in case you want to do a `ViewGroup.removeAllViews()` the animation will disappear because the View object will have also gone.
+Other libraries add a [View][5] object into the container to make the same effect. This is costly for the memory, 
+besides in case you execute `ViewGroup.removeAllViews()` the animation effect will disappear.
 
-Instead, the **Ripple Pulse** library just draws a Paint layer over the canvas, leaving the container empty while doing a smooth animation.
+Instead, the **Ripple Pulse** library just draws a Paint layer over the canvas, 
+leaving the container empty while doing a smooth animation.
 
 
-## Gradle
+## How to apply?
 
 Latest stable version: 
-[![Latest Version](https://api.bintray.com/packages/kuassivi/maven/ripple-pulse-layout/images/download.svg) ](https://bintray.com/kuassivi/maven/ripple-pulse-layout/_latestVersion)
+[![Latest Version][3]][4]
 
-Add this to your build.gradle:
+Add to your dependencies
 
 ```groovy
 repositories {
@@ -36,7 +38,7 @@ dependencies{
 ```
 
 
-## Usage
+## How to use?
 
 Add this to your layout:
 
@@ -90,9 +92,12 @@ To stop the animation
 
 `pulse_layout_PulseInterpolator` - Reference. Indicates the interpolator for the animation.
  
-## Contribute
+## Contributions
 
 You are welcome to contribute, just raise a ticket on the issues page, and make a pull request with your changes.
 
 [1]: ./art/demo.gif
 [2]: ./art/android-studio-preview.png
+[3]: https://api.bintray.com/packages/kuassivi/maven/ripple-pulse-layout/images/download.svg
+[4]: https://bintray.com/kuassivi/maven/ripple-pulse-layout/_latestVersion
+[5]: https://developer.android.com/reference/android/view/View
