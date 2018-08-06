@@ -1,12 +1,12 @@
 # Ripple Pulse over RelativeLayout
 
-This is an Android Custom Layout container that generates pulses.
+This is an Android Custom Layout container that generates animated pulses.
 
 ![Demo][1]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Android Studio Preview][2]
 
-## Why this library?
+## Why choosing this library?
 
-Other libraries add a [View][5] object into the container to make the same effect. This is costly for the memory, 
+Other libraries add a [View][5] object into the container to make the same effect. This is costly, 
 besides in case you execute `ViewGroup.removeAllViews()` the animation effect will disappear.
 
 Instead, the **Ripple Pulse** library just draws a Paint layer over the canvas, 
@@ -15,8 +15,7 @@ leaving the container empty while doing a smooth animation.
 
 ## How to apply?
 
-Latest stable version: 
-[![Latest Version][3]][4]
+Latest stable version: [![Latest Version][3]][4]
 
 Add to your dependencies
 
@@ -40,7 +39,7 @@ dependencies{
 
 ## How to use?
 
-Add this to your layout:
+Add to your layout
 
 ```xml
 <com.kuassivi.component.RipplePulseRelativeLayout
